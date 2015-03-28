@@ -1,1 +1,1 @@
-Empty
+Discover Meteor book project
