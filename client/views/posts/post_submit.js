@@ -4,17 +4,20 @@ Template.postSubmit.events({
     
     var post = {
       url: $(e.target).find('[name=url]').val(),
-      title: $(e.target).find('[name=title]').val()
+      title: $(e.target).find('[name=title]').val(),
+      message: $(e.target).find('[name=message]').val()
     };
     
-    Meteor.call('postInsert', post, function(error, result) {
-      if(error)
-        return alert(error.reason);
-      
-      if(result.postExists)
-        alert('This link has already been posted');
-      
-      Router.go('postPage', {_id: result._id});
+    Meteor.call('post', post, function(error, result) {
+      if (error) {
+        throwError(error.reason);
+        
+        if (error.error === 302)
+          Router.go('postPage', {_id: error.details});
+          
+      } else {
+        Router.go('postPage', {_id: result._id});
+      }
     });
   }
 });
